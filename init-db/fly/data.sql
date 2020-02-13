@@ -1,0 +1,1 @@
+INSERT INTO fly_booking VALUES (1, 'Stepan', 'KLM 1382', 'KBP', 'AMS', '01/05/2015');
