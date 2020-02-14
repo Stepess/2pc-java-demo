@@ -16,6 +16,7 @@ public class FlyBookingServiceImpl implements FlyBookingService {
 
     @Override
     public FlyBooking book(FlyBooking booking) {
+        log.info("Starting booking fly: client [{}], fly [{}]", booking.getClientName(), booking.getFlyNumber());
         return repository.save(booking);
     }
 

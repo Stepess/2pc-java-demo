@@ -21,9 +21,16 @@ public class TripBookingServiceImpl implements TripBookingService {
     @Override
     @Transactional
     public TripBooking book(TripBooking booking) {
-        log.info("Saving booking trip booking");
+        log.info("Booking trip: client [{}]", booking.getFlyBooking().getClientName());
+
         var flyBooking = flyBookingService.book(booking.getFlyBooking());
+        log.debug("Fly booking precommit successful");
+
+        //if (Boolean.TRUE) throw new RuntimeException();
+
         var hotelBooking = hotelBookingService.book(booking.getHotelBooking());
+        log.debug("Hotel booking precommit successful");
+
         return new TripBooking(flyBooking, hotelBooking);
     }
 

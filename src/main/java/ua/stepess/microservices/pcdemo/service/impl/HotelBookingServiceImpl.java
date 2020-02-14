@@ -16,6 +16,7 @@ public class HotelBookingServiceImpl implements HotelBookingService {
 
     @Override
     public HotelBooking book(HotelBooking booking) {
+        log.info("Starting booking hotel: client [{}], fly [{}]", booking.getClientName(), booking.getHotelName());
         return repository.save(booking);
     }
 

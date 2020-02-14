@@ -6,6 +6,7 @@ services:
     volumes:
       - ./init-db/fly/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       - ./init-db/fly/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    command: --max_prepared_transactions=5
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres123
@@ -17,6 +18,7 @@ services:
     volumes:
       - ./init-db/hotel/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       - ./init-db/hotel/data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    command: --max_prepared_transactions=5
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres123
