@@ -1,4 +1,4 @@
-package ua.stepess.microservices.pcdemo.domain;
+package ua.stepess.microservices.pcdemo.domain.fly;
 
 import lombok.Data;
 
@@ -7,14 +7,14 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "fly_booking")
+@Table(name = "fly_booking", schema = "fly")
 public class FlyBooking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "client_name")
     private String clientName;
-    @Column(name = "fly_name")
+    @Column(name = "fly_number")
     private String flyNumber;
     @Column(name = "arrival_place")
     private String from;

@@ -1,4 +1,4 @@
-package ua.stepess.microservices.pcdemo.domain;
+package ua.stepess.microservices.pcdemo.domain.hotel;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "hotel_booking")
+@Table(name = "hotel_booking", schema = "hotel")
 public class HotelBooking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

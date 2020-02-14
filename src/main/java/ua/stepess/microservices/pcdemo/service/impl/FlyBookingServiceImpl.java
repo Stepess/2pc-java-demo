@@ -3,8 +3,8 @@ package ua.stepess.microservices.pcdemo.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ua.stepess.microservices.pcdemo.domain.FlyBooking;
-import ua.stepess.microservices.pcdemo.persistence.FlyBookingRepository;
+import ua.stepess.microservices.pcdemo.domain.fly.FlyBooking;
+import ua.stepess.microservices.pcdemo.persistence.fly.FlyBookingRepository;
 import ua.stepess.microservices.pcdemo.service.FlyBookingService;
 
 @Slf4j

@@ -1,4 +1,6 @@
-CREATE TABLE fly_booking(
+CREATE SCHEMA fly;
+
+CREATE TABLE fly.fly_booking(
    id serial PRIMARY KEY,
    client_name VARCHAR (50) NOT NULL,
    fly_number VARCHAR (50) NOT NULL,

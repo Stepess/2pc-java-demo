@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.stepess.microservices.pcdemo.domain.HotelBooking;
+import ua.stepess.microservices.pcdemo.domain.hotel.HotelBooking;
 import ua.stepess.microservices.pcdemo.service.HotelBookingService;
 
 @RestController

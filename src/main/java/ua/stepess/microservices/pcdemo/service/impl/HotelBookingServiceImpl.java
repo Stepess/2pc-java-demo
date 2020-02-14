@@ -3,8 +3,8 @@ package ua.stepess.microservices.pcdemo.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ua.stepess.microservices.pcdemo.domain.HotelBooking;
-import ua.stepess.microservices.pcdemo.persistence.HotelBookingRepository;
+import ua.stepess.microservices.pcdemo.domain.hotel.HotelBooking;
+import ua.stepess.microservices.pcdemo.persistence.hotel.HotelBookingRepository;
 import ua.stepess.microservices.pcdemo.service.HotelBookingService;
 
 @Slf4j
