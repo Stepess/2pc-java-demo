@@ -1,10 +1,7 @@
 package ua.stepess.microservices.pcdemo.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.stepess.microservices.pcdemo.domain.TripBooking;
 import ua.stepess.microservices.pcdemo.service.TripBookingService;
 
@@ -18,6 +15,11 @@ public class BookingController {
     @GetMapping("/{id}")
     public TripBooking getBook(@PathVariable Long id) {
         return tripBookingService.find(id);
+    }
+
+    @PostMapping
+    public TripBooking book(@RequestBody TripBooking tripBooking) {
+        return tripBookingService.book(tripBooking);
     }
 
 }

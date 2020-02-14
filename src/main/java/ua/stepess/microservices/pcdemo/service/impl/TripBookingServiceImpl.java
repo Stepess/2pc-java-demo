@@ -8,6 +8,8 @@ import ua.stepess.microservices.pcdemo.service.FlyBookingService;
 import ua.stepess.microservices.pcdemo.service.HotelBookingService;
 import ua.stepess.microservices.pcdemo.service.TripBookingService;
 
+import javax.transaction.Transactional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -17,8 +19,12 @@ public class TripBookingServiceImpl implements TripBookingService {
     private final HotelBookingService hotelBookingService;
 
     @Override
+    @Transactional
     public TripBooking book(TripBooking booking) {
-        return null;
+        log.info("Saving booking trip booking");
+        var flyBooking = flyBookingService.book(booking.getFlyBooking());
+        var hotelBooking = hotelBookingService.book(booking.getHotelBooking());
+        return new TripBooking(flyBooking, hotelBooking);
     }
 
     @Override
