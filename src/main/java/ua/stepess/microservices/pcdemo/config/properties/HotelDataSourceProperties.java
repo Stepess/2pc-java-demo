@@ -8,5 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "db.hotel")
 public class HotelDataSourceProperties {
-    private String url;
+    private Integer port;
+    private String database;
+    private String user;
+    private String password;
+    private String serverName;
 }

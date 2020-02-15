@@ -20,7 +20,7 @@ import javax.transaction.UserTransaction;
 @Configuration
 @ComponentScan
 @EnableTransactionManagement
-public class MainConfig {
+public class PersistenceConfig {
 
     @Bean
     public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {

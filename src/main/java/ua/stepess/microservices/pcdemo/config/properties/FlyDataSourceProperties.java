@@ -8,5 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "db.fly")
 public class FlyDataSourceProperties {
-    private String url;
+    private Integer port;
+    private String database;
+    private String user;
+    private String password;
+    private String serverName;
 }

@@ -30,17 +30,17 @@ public class FlyBookingConfig {
     private FlyDataSourceProperties flyDataSourceProperties;
 
     @Bean(name = "flyDataSource", initMethod = "init", destroyMethod = "close")
-    public DataSource customerDataSource() {
+    public DataSource flyDataSource() {
         AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
         xaDataSource.setXaDataSourceClassName("org.postgresql.xa.PGXADataSource");
         xaDataSource.setUniqueResourceName("fly-postgres-db");
 
         Properties properties = new Properties();
-        properties.setProperty ( "user" , "postgres" );
-        properties.setProperty ( "password" , "postgres123" );
-        properties.setProperty ( "serverName" , "localhost" );
-        properties.setProperty ( "portNumber" , "5436" );
-        properties.setProperty ( "databaseName" , "postgres" );
+        properties.setProperty("user", flyDataSourceProperties.getUser());
+        properties.setProperty("password", flyDataSourceProperties.getPassword());
+        properties.setProperty("serverName", flyDataSourceProperties.getServerName());
+        properties.setProperty("portNumber", flyDataSourceProperties.getPort().toString());
+        properties.setProperty("databaseName", flyDataSourceProperties.getDatabase());
 
         xaDataSource.setXaProperties(properties);
 
@@ -49,13 +49,13 @@ public class FlyBookingConfig {
 
     @Bean(name = "flyEntityManager")
     @DependsOn("transactionManager")
-    public LocalContainerEntityManagerFactoryBean flyEntityManager() throws Throwable {
+    public LocalContainerEntityManagerFactoryBean flyEntityManager(DataSource flyDataSource) {
         HashMap<String, Object> properties = new HashMap<>();
         properties.put("hibernate.transaction.jta.platform", AtomikosJtaPlatform.class.getName());
         properties.put("javax.persistence.transactionType", "JTA");
 
         LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
-        entityManager.setJtaDataSource(customerDataSource());
+        entityManager.setJtaDataSource(flyDataSource);
         entityManager.setJpaVendorAdapter(jpaVendorAdapter);
         entityManager.setPackagesToScan("ua.stepess.microservices.pcdemo.domain.fly");
         entityManager.setPersistenceUnitName("flyPersistenceUnit");

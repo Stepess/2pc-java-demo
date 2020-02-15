@@ -29,18 +29,18 @@ public class HotelBookingConfig {
     @Autowired
     private HotelDataSourceProperties hotelDataSourceProperties;
 
-    @Bean(name = "orderDataSource", initMethod = "init", destroyMethod = "close")
-    public DataSource orderDataSource() {
+    @Bean(name = "hotelDataSource", initMethod = "init", destroyMethod = "close")
+    public DataSource hotelDataSource() {
         AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
         xaDataSource.setXaDataSourceClassName("org.postgresql.xa.PGXADataSource");
         xaDataSource.setUniqueResourceName("hotel-postgres-db");
 
         Properties properties = new Properties();
-        properties.setProperty ( "user" , "postgres" );
-        properties.setProperty ( "password" , "postgres123" );
-        properties.setProperty ( "serverName" , "localhost" );
-        properties.setProperty ( "portNumber" , "5435" );
-        properties.setProperty ( "databaseName" , "postgres" );
+        properties.setProperty("user", hotelDataSourceProperties.getUser());
+        properties.setProperty("password", hotelDataSourceProperties.getPassword());
+        properties.setProperty("serverName", hotelDataSourceProperties.getServerName());
+        properties.setProperty("portNumber", hotelDataSourceProperties.getPort().toString());
+        properties.setProperty("databaseName", hotelDataSourceProperties.getDatabase());
 
         xaDataSource.setXaProperties(properties);
 
@@ -48,14 +48,14 @@ public class HotelBookingConfig {
     }
 
     @Bean(name = "hotelEntityManager")
-    public LocalContainerEntityManagerFactoryBean hotelEntityManager() throws Throwable {
+    public LocalContainerEntityManagerFactoryBean hotelEntityManager(DataSource hotelDataSource) {
 
         HashMap<String, Object> properties = new HashMap<>();
         properties.put("hibernate.transaction.jta.platform", AtomikosJtaPlatform.class.getName());
         properties.put("javax.persistence.transactionType", "JTA");
 
         LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
-        entityManager.setJtaDataSource(orderDataSource());
+        entityManager.setJtaDataSource(hotelDataSource);
         entityManager.setJpaVendorAdapter(jpaVendorAdapter);
         entityManager.setPackagesToScan("ua.stepess.microservices.pcdemo.domain.hotel");
         entityManager.setPersistenceUnitName("hotelPersistenceUnit");

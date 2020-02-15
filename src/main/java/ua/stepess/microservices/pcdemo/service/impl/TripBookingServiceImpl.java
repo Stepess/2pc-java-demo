@@ -26,7 +26,7 @@ public class TripBookingServiceImpl implements TripBookingService {
         var flyBooking = flyBookingService.book(booking.getFlyBooking());
         log.debug("Fly booking precommit successful");
 
-        //if (Boolean.TRUE) throw new RuntimeException();
+        if (Boolean.TRUE) throw new RuntimeException();
 
         var hotelBooking = hotelBookingService.book(booking.getHotelBooking());
         log.debug("Hotel booking precommit successful");
