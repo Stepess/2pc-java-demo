@@ -13,4 +13,6 @@ public class TripBooking {
     private FlyBooking flyBooking;
     @JsonProperty("hotel")
     private HotelBooking hotelBooking;
+    private Boolean fail;
+    private Long wait;
 }

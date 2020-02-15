@@ -32,7 +32,7 @@ public class PersistenceConfig {
     @Bean(name = "userTransaction")
     public UserTransaction userTransaction() throws Throwable {
         var userTransactionImp = new UserTransactionImp();
-        userTransactionImp.setTransactionTimeout(10000);
+        userTransactionImp.setTransactionTimeout(100_000);
         return userTransactionImp;
     }
 

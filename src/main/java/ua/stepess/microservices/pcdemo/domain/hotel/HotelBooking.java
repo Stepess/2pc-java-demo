@@ -29,6 +29,6 @@ public class HotelBooking {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
-    @Column(name = "depurture_date")
+    @Column(name = "departure_date")
     private LocalDate to;
 }
