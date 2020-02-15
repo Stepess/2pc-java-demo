@@ -13,4 +13,5 @@ public class FlyDataSourceProperties {
     private String user;
     private String password;
     private String serverName;
+    private String xaResourceName;
 }

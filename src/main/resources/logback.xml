@@ -11,6 +11,8 @@
 
     <logger name="ua.stepess.microservices.pcdemo" level="debug"/>
 
+    <logger name="com.atomikos.jdbc" level="debug" />
+
     <root level="info">
         <appender-ref ref="console" />
     </root>

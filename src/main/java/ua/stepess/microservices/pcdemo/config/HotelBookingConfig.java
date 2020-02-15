@@ -1,7 +1,7 @@
 package ua.stepess.microservices.pcdemo.config;
 
+import lombok.RequiredArgsConstructor;
 import org.hibernate.engine.transaction.jta.platform.internal.AtomikosJtaPlatform;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
@@ -11,29 +11,27 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import ua.stepess.microservices.pcdemo.config.properties.HotelDataSourceProperties;
+import ua.stepess.microservices.pcdemo.persistence.hotel.HotelBookingRepository;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Properties;
 
 @Configuration
+@RequiredArgsConstructor
 @DependsOn("transactionManager")
-@EnableJpaRepositories(basePackages = "ua.stepess.microservices.pcdemo.persistence.hotel",
-        entityManagerFactoryRef = "hotelEntityManager", transactionManagerRef = "transactionManager")
+@EnableJpaRepositories(basePackageClasses = HotelBookingRepository.class, entityManagerFactoryRef = "hotelEntityManager")
 @EnableConfigurationProperties(HotelDataSourceProperties.class)
 public class HotelBookingConfig {
 
-    @Autowired
-    private JpaVendorAdapter jpaVendorAdapter;
-
-    @Autowired
-    private HotelDataSourceProperties hotelDataSourceProperties;
+    private final JpaVendorAdapter jpaVendorAdapter;
+    private final HotelDataSourceProperties hotelDataSourceProperties;
 
     @Bean(name = "hotelDataSource", initMethod = "init", destroyMethod = "close")
     public DataSource hotelDataSource() {
-        AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
+        var xaDataSource = new AtomikosDataSourceBean();
         xaDataSource.setXaDataSourceClassName("org.postgresql.xa.PGXADataSource");
-        xaDataSource.setUniqueResourceName("hotel-postgres-db");
+        xaDataSource.setUniqueResourceName(hotelDataSourceProperties.getXaResourceName());
 
         Properties properties = new Properties();
         properties.setProperty("user", hotelDataSourceProperties.getUser());
@@ -49,12 +47,11 @@ public class HotelBookingConfig {
 
     @Bean(name = "hotelEntityManager")
     public LocalContainerEntityManagerFactoryBean hotelEntityManager(DataSource hotelDataSource) {
-
-        HashMap<String, Object> properties = new HashMap<>();
+        var properties = new HashMap<String, Object>();
         properties.put("hibernate.transaction.jta.platform", AtomikosJtaPlatform.class.getName());
         properties.put("javax.persistence.transactionType", "JTA");
 
-        LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
+        var entityManager = new LocalContainerEntityManagerFactoryBean();
         entityManager.setJtaDataSource(hotelDataSource);
         entityManager.setJpaVendorAdapter(jpaVendorAdapter);
         entityManager.setPackagesToScan("ua.stepess.microservices.pcdemo.domain.hotel");
