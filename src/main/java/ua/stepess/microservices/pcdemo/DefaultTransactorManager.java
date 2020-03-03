@@ -57,15 +57,19 @@ public class DefaultTransactorManager {
 
         try {
 
-            var xaFlyResource = prepareTransaction(flyDataSource, xid, "INSERT INTO " +
-                    "fly.fly_booking (client_name, fly_number, arrival_place, departure_place, arrival_date) " +
-                    "VALUES ('Stepan Yershov', 'KLM 1382', 'KBP', 'AMS', '01/05/2015')");
+            var insertFlyQuery = "INSERT INTO fly.fly_booking" +
+                    "(client_name, fly_number, arrival_place, departure_place, arrival_date) " +
+                    "VALUES ('Stepan Yershov', 'KLM 1382', 'KBP', 'AMS', '01/05/2015')";
 
-            var xaHotelResource = prepareTransaction(hotelDataSource, xid, "INSERT INTO " +
-                    "hotel.hotel_booking(client_name, hotel_name, arrival_date, departure_date) " +
-                    "VALUES ('Stepan Yershov', 'Hilton', '01/05/2015', '07/05/2015')");
+            var xaFlyResource = prepareTransaction(flyDataSource, xid, insertFlyQuery);
 
-            commit(xaFlyResource, xaHotelResource, xid);
+            var insertHotelQuery = "INSERT INTO hotel.hotel_booking" +
+                    "(client_name, hotel_name, arrival_date, departure_date) " +
+                    "VALUES ('Stepan Yershov', 'Hilton', '01/05/2015', '07/05/2015')";
+
+            var xaHotelResource = prepareTransaction(hotelDataSource, xid, insertHotelQuery);
+
+            commitTwoPhase(xaFlyResource, xaHotelResource, xid);
 
         } catch (SQLException sqe) {
             System.out.println("SQLException caught: " + sqe.getMessage());
@@ -97,7 +101,7 @@ public class DefaultTransactorManager {
         statement.execute(query);
     }
 
-    private static void commit(XAResource xaRes1, XAResource xaRes2, XID xid) {
+    private static void commitTwoPhase(XAResource xaRes1, XAResource xaRes2, XID xid) {
         try {
             int rc1 = xaRes1.prepare(xid);
             if (rc1 == XAResource.XA_OK) {
