@@ -53,6 +53,11 @@ public class DefaultTransactorManager {
         hotelDataSource.setUser("postgres");
         hotelDataSource.setPassword("postgres123");
 
+        var moneyDataSource = new PGXADataSource();
+        moneyDataSource.setUrl("jdbc:postgresql://localhost:5437/postgres");
+        moneyDataSource.setUser("postgres");
+        moneyDataSource.setPassword("postgres123");
+
         var xid = new XID(100, gtrid, bqual);
 
         try {
@@ -69,7 +74,13 @@ public class DefaultTransactorManager {
 
             var xaHotelResource = prepareTransaction(hotelDataSource, xid, insertHotelQuery);
 
-            commitTwoPhase(xaFlyResource, xaHotelResource, xid);
+            var updateMoneyQuery = "UPDATE money.money " +
+                    "SET amount = amount - 0" +
+                    "WHERE client_name = 'Stepan'";
+
+            var xaMoneyResource = prepareTransaction(moneyDataSource, xid,updateMoneyQuery);
+
+            commitTwoPhase(xaFlyResource, xaHotelResource, xaMoneyResource, xid);
 
         } catch (SQLException sqe) {
             System.out.println("SQLException caught: " + sqe.getMessage());
@@ -99,6 +110,27 @@ public class DefaultTransactorManager {
         var jdbcConnection = xaConnection.getConnection();
         var statement = jdbcConnection.createStatement();
         statement.execute(query);
+    }
+
+    private static void commitTwoPhase(XAResource xaRes1, XAResource xaRes2, XAResource xaRes3,  XID xid) {
+        try {
+            xaRes1.prepare(xid);
+            xaRes2.prepare(xid);
+            xaRes3.prepare(xid);
+
+            xaRes1.commit(xid, false);
+            xaRes2.commit(xid, false);
+            xaRes3.commit(xid, false);
+        } catch (XAException e) {
+            try {
+                xaRes1.rollback(xid);
+                xaRes2.rollback(xid);
+                xaRes3.rollback(xid);
+            } catch (XAException ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     private static void commitTwoPhase(XAResource xaRes1, XAResource xaRes2, XID xid) {
